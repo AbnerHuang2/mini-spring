@@ -6,5 +6,5 @@ package org.skitii.factory;
  **/
 public interface BeanFactory {
 
-    public Object getBean();
+    Object getBean(String name);
 }
