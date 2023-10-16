@@ -6,6 +6,7 @@ package org.skitii;
  **/
 public class TestUserService {
     private String name;
+    private int age;
 
     public TestUserService(String name) {
         this.name = name;
@@ -13,5 +14,9 @@ public class TestUserService {
 
     public void hello() {
         System.out.println("hello world!"+name);
+    }
+
+    public int getAge() {
+        return age;
     }
 }

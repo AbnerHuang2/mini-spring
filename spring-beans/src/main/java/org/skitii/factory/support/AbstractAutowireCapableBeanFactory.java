@@ -1,8 +1,13 @@
 package org.skitii.factory.support;
 
+import cn.hutool.core.bean.BeanUtil;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.NoOp;
+import org.skitii.factory.PropertyValue;
 import org.skitii.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -14,12 +19,31 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition) {
+        return doCreateBean(beanName, beanDefinition);
+    }
+
+    public Object doCreateBean(String beanName, BeanDefinition beanDefinition) {
         try {
             Object bean = createBeanInstance(beanDefinition);
+            // 添加到单例池
             registerSingleton(beanName, bean);
+
+            // 属性注入
+            applyPropertyValues(beanName, beanDefinition, bean);
+
             return bean;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void applyPropertyValues(String beanName, BeanDefinition beanDefinition, Object bean) {
+        for (PropertyValue propertyValue : beanDefinition.getPropertyValues()) {
+            String name = propertyValue.getName();
+            Object value = propertyValue.getValue();
+            //设置属性
+            BeanUtil.setFieldValue(bean, name, value);
+
         }
     }
 

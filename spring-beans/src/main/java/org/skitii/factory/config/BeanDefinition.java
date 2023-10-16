@@ -1,31 +1,23 @@
 package org.skitii.factory.config;
 
+import lombok.Data;
+import org.skitii.factory.PropertyValues;
+
+import java.lang.reflect.Field;
+
 /**
  * @author skitii
  * @since 2023/10/13
  * 通过BeanDefinition来描述Bean的配置信息，用来保存创建bean所需要的各种信息
  **/
+@Data
 public class BeanDefinition {
     Class beanClass;
-    String beanClassName;
+
+    PropertyValues propertyValues;
 
     public BeanDefinition(Class beanClass) {
         this.beanClass = beanClass;
     }
 
-    public Class getBeanClass() {
-        return beanClass;
-    }
-
-    public void setBeanClass(Class beanClass) {
-        this.beanClass = beanClass;
-    }
-
-    public String getBeanClassName() {
-        return beanClassName;
-    }
-
-    public void setBeanClassName(String beanClassName) {
-        this.beanClassName = beanClassName;
-    }
 }
