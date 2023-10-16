@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * 构造函数实例化策略接口
  * @author skitii
  * @since 2023/10/16
  **/
