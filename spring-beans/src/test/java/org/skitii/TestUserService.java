@@ -8,12 +8,14 @@ public class TestUserService {
     private String name;
     private int age;
 
+    private TestUserMapper testUserMapper;
+
     public TestUserService(String name) {
         this.name = name;
     }
 
     public void hello() {
-        System.out.println("hello world!"+name);
+        System.out.println("hello world!"+testUserMapper.get("a"));
     }
 
     public int getAge() {
