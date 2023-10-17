@@ -15,7 +15,7 @@ public class TestUserService {
     }
 
     public void hello() {
-        System.out.println("hello world!"+testUserMapper.get("a"));
+        System.out.println("hello world! "+testUserMapper.get("a"));
     }
 
     public int getAge() {

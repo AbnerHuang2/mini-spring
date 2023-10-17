@@ -44,8 +44,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             Object value = propertyValue.getValue();
             if (value instanceof BeanReference){
                 BeanReference beanReference = (BeanReference) value;
-                // 从map中获取bean
-                value = getSingleton(beanReference.getBeanName());
+                // 递归获取或创建bean【可能存在循环依赖的问题，后续处理】
+                value = getBean(beanReference.getBeanName());
             }
             //设置属性
             BeanUtil.setFieldValue(bean, name, value);

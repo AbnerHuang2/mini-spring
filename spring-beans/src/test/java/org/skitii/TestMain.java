@@ -19,8 +19,6 @@ public class TestMain {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         // 注册bean
         beanFactory.registerBeanDefinition("testUserMapper", new BeanDefinition(TestUserMapper.class));
-        // 获取bean(把bean放入到缓存中)
-        beanFactory.getBean("testUserMapper");
 
         BeanDefinition beanDefinition = new BeanDefinition(TestUserService.class);
         List<PropertyValue> list = Arrays.asList(new PropertyValue("name", "skitii"),
@@ -28,11 +26,11 @@ public class TestMain {
                 new PropertyValue("testUserMapper", new BeanReference("testUserMapper")));
         beanDefinition.setPropertyValues(new PropertyValues(list));
         beanFactory.registerBeanDefinition("helloService", beanDefinition);
+
         // 获取bean
         TestUserService helloService = (TestUserService) beanFactory.getBean("helloService");
         // 调用方法
         helloService.hello();
-        System.out.println(helloService.getAge());
 
     }
 }

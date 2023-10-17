@@ -25,4 +25,13 @@ public class PropertyValues implements Iterable<PropertyValue> {
     PropertyValue[] getPropertyValues() {
         return propertyValueList.toArray(new PropertyValue[0]);
     }
+
+    public void addPropertyValue(PropertyValue pv) {
+        this.propertyValueList.add(pv);
+    }
+
+    public void addPropertyValue(String name, Object value) {
+        addPropertyValue(new PropertyValue(name, value));
+    }
+
 }

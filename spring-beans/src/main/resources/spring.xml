@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="testUserMapper" class="org.skitii.TestUserMapper"/>
+    <bean id="testUserService" class="org.skitii.TestUserService">
+        <property name="name" value="sk"/>
+        <property name="testUserMapper" ref="testUserMapper"/>
+    </bean>
+</beans>
