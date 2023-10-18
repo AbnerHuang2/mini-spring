@@ -1,6 +1,5 @@
 package org.skitii.core.io;
 
-import com.sun.istack.internal.Nullable;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,7 +10,6 @@ import java.net.URL;
  **/
 public class DefaultResourceLoader implements ResourceLoader{
 
-    @Nullable
     private ClassLoader classLoader;
 
     public ClassLoader getClassLoader() {

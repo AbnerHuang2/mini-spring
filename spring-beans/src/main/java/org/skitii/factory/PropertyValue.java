@@ -1,6 +1,5 @@
 package org.skitii.factory;
 
-import com.sun.istack.internal.Nullable;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,10 +12,9 @@ import java.io.Serializable;
 public class PropertyValue implements Serializable {
     private final String name;
 
-    @Nullable
     private final Object value;
 
-    public PropertyValue(String name, @Nullable Object value) {
+    public PropertyValue(String name, Object value) {
         this.name = name;
         this.value = value;
     }

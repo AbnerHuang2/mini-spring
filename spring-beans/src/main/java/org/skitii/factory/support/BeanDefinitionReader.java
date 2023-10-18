@@ -1,6 +1,5 @@
 package org.skitii.factory.support;
 
-import com.sun.istack.internal.Nullable;
 import org.skitii.core.io.Resource;
 import org.skitii.core.io.ResourceLoader;
 
@@ -12,7 +11,6 @@ public interface BeanDefinitionReader {
 
     BeanDefinitionRegistry getRegistry();
 
-    @Nullable
     ResourceLoader getResourceLoader();
 
     int loadBeanDefinitions(Resource resource);
