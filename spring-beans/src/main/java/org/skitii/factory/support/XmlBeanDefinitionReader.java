@@ -54,6 +54,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
             Element ele = (Element) item;
             String id = ele.getAttribute("id");
             String className = ele.getAttribute("class");
+
             // 获取 Class，方便获取类中的名称
             Class<?> clazz = Class.forName(className);
             // 优先级 id > name
@@ -63,8 +64,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
             }
             // 创建 BeanDefinition
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
-            beanDefinition.setPropertyValues(new PropertyValues(new ArrayList<>()));
             // 填充属性
+            beanDefinition.setPropertyValues(new PropertyValues(new ArrayList<>()));
             for (int i1 = 0; i1 < ele.getChildNodes().getLength(); i1++) {
                 Node item1 = ele.getChildNodes().item(i1);
                 if (!(item1 instanceof Element)) continue;
@@ -76,6 +77,16 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
                 Object value = StrUtil.isNotEmpty(ref) ? new BeanReference(ref) : attrValue;
 
                 beanDefinition.getPropertyValues().addPropertyValue(name, value);
+            }
+
+            //处理init-method和destroy-method
+            String initMethod = ele.getAttribute("init-method");
+            String destroyMethod = ele.getAttribute("destroy-method");
+            if (StrUtil.isNotEmpty(initMethod)) {
+                beanDefinition.setInitMethodName(initMethod);
+            }
+            if (StrUtil.isNotEmpty(destroyMethod)) {
+                beanDefinition.setDestroyMethodName(destroyMethod);
             }
 
             // 注册 BeanDefinition

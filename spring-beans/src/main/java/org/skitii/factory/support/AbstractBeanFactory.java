@@ -36,6 +36,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         }
         // 2. 创建bean
         bean = createBean(name, mergedBeanDefinitions.get(name));
+
         // 3. 添加到缓存
         registerSingleton(name, bean);
         return bean;

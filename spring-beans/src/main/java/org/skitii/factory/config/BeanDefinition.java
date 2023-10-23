@@ -3,8 +3,6 @@ package org.skitii.factory.config;
 import lombok.Data;
 import org.skitii.factory.PropertyValues;
 
-import java.lang.reflect.Field;
-
 /**
  * @author skitii
  * @since 2023/10/13
@@ -15,6 +13,10 @@ public class BeanDefinition {
     Class beanClass;
 
     PropertyValues propertyValues;
+
+    String initMethodName;
+
+    String destroyMethodName;
 
     public BeanDefinition(Class beanClass) {
         this.beanClass = beanClass;

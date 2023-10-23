@@ -1,8 +1,8 @@
 package org.skitii.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
-import org.skitii.factory.AutowireCapableBeanFactory;
-import org.skitii.factory.PropertyValue;
+import cn.hutool.core.util.StrUtil;
+import org.skitii.factory.*;
 import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.config.BeanPostProcessor;
 import org.skitii.factory.config.BeanReference;
@@ -34,9 +34,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             // 初始化
             bean = initializeBean(beanName, bean, beanDefinition);
 
+            // 注册实现了 DisposableBean 接口的 Bean 对象
+            registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+
             return bean;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        // 实现了DisposableBean接口或者配置了destroy-method属性
+        if (bean instanceof DisposableBean || StrUtil.isNotBlank(beanDefinition.getDestroyMethodName()) ) {
+            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
         }
     }
 
@@ -92,7 +102,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
-
+        // 处理InitializingBean接口的afterPropertiesSet方法
+        if (wrappedBean instanceof InitializingBean) {
+            ((InitializingBean) wrappedBean).afterPropertiesSet();
+        }
+        // 处理init-method属性指定的初始化方法
+        String initMethodName = beanDefinition.getInitMethodName();
+        if (null != initMethodName) {
+            try {
+                wrappedBean.getClass().getMethod(initMethodName).invoke(wrappedBean);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

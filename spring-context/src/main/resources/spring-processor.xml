@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper"/>
+    <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
     <bean id="testUserService" class="org.skitii.context.test.TestUserService">
         <property name="name" value="sk"/>
         <property name="testUserMapper" ref="testUserMapper"/>

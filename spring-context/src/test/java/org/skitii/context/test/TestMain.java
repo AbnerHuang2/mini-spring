@@ -10,7 +10,7 @@ public class TestMain {
     public static void main(String[] args) {
         // 1.初始化BeanFactory
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring-processor.xml");
-
+        applicationContext.registerShutdownHook();
         // 4.获取Bean
         TestUserService userService = (TestUserService) applicationContext.getBean("testUserService");
 
