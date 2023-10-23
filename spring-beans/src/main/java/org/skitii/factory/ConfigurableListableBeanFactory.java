@@ -4,6 +4,7 @@ import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.config.ConfigurableBeanFactory;
 
 /**
+ * 可配置的可列举的bean工厂接口
  * @author skitii
  * @since 2023/10/23
  **/

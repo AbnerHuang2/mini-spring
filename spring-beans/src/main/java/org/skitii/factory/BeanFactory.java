@@ -1,6 +1,7 @@
 package org.skitii.factory;
 
 /**
+ * bean工厂接口
  * @author skitii
  * @since 2023/10/10
  **/

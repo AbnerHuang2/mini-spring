@@ -9,6 +9,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 
     public ClassPathXmlApplicationContext(String... locations) {
         this.locations = locations;
+        // 加载相关bean到容器中
         refresh();
     }
 
