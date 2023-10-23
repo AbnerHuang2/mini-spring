@@ -12,10 +12,10 @@ bean工厂，定义了IOC容器的基本功能，主要是获取bean，创建bea
 bean定义注册器，主要定义了BeanDefinition的相关功能。
 ## IOC相关类的继承关系
 目前暂时只是简化版
-![img.png](../img/img.png)
+![img.png](../img/beanfactory.png)
 
 spring的相关继承关系
-![img.png](../img/spring-beanfactory.png)
+![img.png](../img/beanfactory-spring.png)
 
 ## 测试
 在test包下的TestMain中，可以看到测试的代码，可以通过debug的方式，一步一步的看到spring的初始化过程。
