@@ -1,15 +1,21 @@
 package org.skitii.factory.support;
 
+import org.skitii.factory.config.BeanDefinition;
+import org.skitii.factory.config.BeanPostProcessor;
+import org.skitii.factory.config.ConfigurableBeanFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.skitii.factory.config.BeanDefinition;
-import org.skitii.factory.config.ConfigurableBeanFactory;
 
 /**
  * @author skitii
  * @since 2023/10/12
  **/
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
     public Map<String, BeanDefinition> getMergedBeanDefinitions() {
         return mergedBeanDefinitions;
@@ -37,4 +43,13 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition);
 
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
 }

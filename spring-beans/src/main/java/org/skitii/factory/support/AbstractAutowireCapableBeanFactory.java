@@ -1,18 +1,21 @@
 package org.skitii.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
+import org.skitii.factory.AutowireCapableBeanFactory;
 import org.skitii.factory.PropertyValue;
 import org.skitii.factory.config.BeanDefinition;
+import org.skitii.factory.config.BeanPostProcessor;
 import org.skitii.factory.config.BeanReference;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * 负责bean的实例化相关操作
  * @author skitii
  * @since 2023/10/13
  **/
-public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory{
+public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
     private  InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
     @Override
@@ -28,28 +31,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
             // 属性注入
             applyPropertyValues(beanName, beanDefinition, bean);
+            // 初始化
+            bean = initializeBean(beanName, bean, beanDefinition);
 
             return bean;
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void applyPropertyValues(String beanName, BeanDefinition beanDefinition, Object bean) {
-        if (beanDefinition.getPropertyValues() == null) {
-            return;
-        }
-        for (PropertyValue propertyValue : beanDefinition.getPropertyValues()) {
-            String name = propertyValue.getName();
-            Object value = propertyValue.getValue();
-            if (value instanceof BeanReference){
-                BeanReference beanReference = (BeanReference) value;
-                // 递归获取或创建bean【可能存在循环依赖的问题，后续处理】
-                value = getBean(beanReference.getBeanName());
-            }
-            //设置属性
-            BeanUtil.setFieldValue(bean, name, value);
-
         }
     }
 
@@ -76,5 +63,59 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         return null;
     }
+    private void applyPropertyValues(String beanName, BeanDefinition beanDefinition, Object bean) {
+        if (beanDefinition.getPropertyValues() == null) {
+            return;
+        }
+        for (PropertyValue propertyValue : beanDefinition.getPropertyValues()) {
+            String name = propertyValue.getName();
+            Object value = propertyValue.getValue();
+            if (value instanceof BeanReference){
+                BeanReference beanReference = (BeanReference) value;
+                // 递归获取或创建bean【可能存在循环依赖的问题，后续处理】
+                value = getBean(beanReference.getBeanName());
+            }
+            //设置属性
+            BeanUtil.setFieldValue(bean, name, value);
+
+        }
+    }
+
+    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        // 1. 执行BeanPostProcessor的前置处理
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+        // 2. 执行bean的初始化方法
+        invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        // 3. 执行BeanPostProcessor的后置处理
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        return wrappedBean;
+    }
+
+    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+
+    }
+
+    @Override
+    public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) {
+        Object result = existingBean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessBeforeInitialization(result, beanName);
+            if (null == current) return result;
+            result = current;
+        }
+        return result;
+    }
+
+    @Override
+    public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) {
+        Object result = existingBean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessAfterInitialization(result, beanName);
+            if (null == current) return result;
+            result = current;
+        }
+        return result;
+    }
+
 
 }

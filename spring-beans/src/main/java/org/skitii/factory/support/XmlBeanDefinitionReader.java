@@ -34,8 +34,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
     }
 
     @Override
-    public int loadBeanDefinitions(String location) {
-        return loadBeanDefinitions(getResourceLoader().getResource(location));
+    public int loadBeanDefinitions(String... locations) {
+        int count = 0;
+        for (String loc : locations) {
+            count += loadBeanDefinitions(getResourceLoader().getResource(loc));
+        }
+        return count;
     }
 
     private int doLoadBeanDefinitions(InputStream inputStream) throws ClassNotFoundException {
