@@ -89,6 +89,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
                 beanDefinition.setDestroyMethodName(destroyMethod);
             }
 
+            // 处理 scope
+            String scope = ele.getAttribute("scope");
+            if (StrUtil.isNotEmpty(scope)) {
+                beanDefinition.setScope(scope);
+            }
+
             // 注册 BeanDefinition
             getRegistry().registerBeanDefinition(beanName, beanDefinition);
             count++;

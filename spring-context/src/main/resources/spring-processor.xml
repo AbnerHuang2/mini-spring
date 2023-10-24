@@ -8,4 +8,10 @@
 
     <bean class="org.skitii.context.common.MyBeanPostProcessor"/>
     <bean class="org.skitii.context.common.MyBeanFactoryPostProcessor"/>
+
+    <bean id="proxyUserDao" class="org.skitii.context.factorybean.ProxyBeanFactory">
+        <property name="testUserMapper" ref="testUserMapper"/>
+    </bean>
+
+    <bean id="testPrototypeBeanMapper" class="org.skitii.context.TestPrototypeBeanMapper" scope="prototype" />
 </beans>

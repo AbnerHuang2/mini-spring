@@ -1,5 +1,6 @@
 package org.skitii.context;
 
+import org.skitii.context.factorybean.IUserDao;
 import org.skitii.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -16,5 +17,14 @@ public class TestMain {
 
         // 5.调用方法
         userService.hello();
+
+        // test factory bean
+        IUserDao userDao = (IUserDao) applicationContext.getBean("proxyUserDao");
+        System.out.println(userDao.queryUserName("1"));
+
+        TestPrototypeBeanMapper prototype1 = (TestPrototypeBeanMapper) applicationContext.getBean("testPrototypeBeanMapper");
+        TestPrototypeBeanMapper prototype2 = (TestPrototypeBeanMapper) applicationContext.getBean("testPrototypeBeanMapper");
+        System.out.printf("prototype1:%s prototype2:%s%n", prototype1, prototype2);
+
     }
 }

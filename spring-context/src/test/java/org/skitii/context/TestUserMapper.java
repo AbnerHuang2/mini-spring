@@ -12,9 +12,9 @@ import java.util.Map;
 public class TestUserMapper implements InitializingBean {
     private static final Map<String,String> map = new HashMap<>();
     static {
-        map.put("a","1");
-        map.put("b","2");
-        map.put("c","3");
+        map.put("1","skitii");
+        map.put("2","hello");
+        map.put("3","world");
     }
 
     public String get(String key){

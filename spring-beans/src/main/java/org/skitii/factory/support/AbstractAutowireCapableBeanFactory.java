@@ -27,9 +27,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     public Object doCreateBean(String beanName, BeanDefinition beanDefinition) {
         try {
             Object bean = createBeanInstance(beanDefinition);
-            // 添加到单例池
-            registerSingleton(beanName, bean);
-
             // 属性注入
             applyPropertyValues(beanName, beanDefinition, bean);
             // 初始化
@@ -37,6 +34,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
             // 注册实现了 DisposableBean 接口的 Bean 对象
             registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+
+            if (beanDefinition.isSingleton()) {
+                // 添加到单例池
+                registerSingleton(beanName, bean);
+            }
 
             return bean;
         } catch (Exception e) {

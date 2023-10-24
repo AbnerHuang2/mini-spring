@@ -5,4 +5,8 @@
         <property name="name" value="sk"/>
         <property name="testUserMapper" ref="testUserMapper"/>
     </bean>
+
+    <bean id="proxyUserDao" class="org.skitii.context.factorybean.ProxyBeanFactory"/>
+
+    <bean id="testPrototypeBeanMapper" class="org.skitii.context.TestPrototypeBeanMapper" scope="prototype" />
 </beans>

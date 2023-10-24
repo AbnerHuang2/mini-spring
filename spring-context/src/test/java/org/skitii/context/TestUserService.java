@@ -17,7 +17,7 @@ public class TestUserService implements BeanNameAware, ApplicationContextAware{
     }
 
     public void hello() {
-        System.out.printf("hello world! %s %s %s%n", name, age, testUserMapper.get("a"));
+        System.out.printf("hello world! %s %s %s%n", name, age, testUserMapper.get("1"));
     }
 
     public int getAge() {

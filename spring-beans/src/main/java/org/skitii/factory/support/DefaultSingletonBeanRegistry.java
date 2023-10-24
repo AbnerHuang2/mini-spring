@@ -12,23 +12,29 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2023/10/16
  **/
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
+    /**
+     * Internal marker for a null singleton object:
+     * used as marker value for concurrent Maps (which don't support null values).
+     */
+    protected static final Object NULL_OBJECT = new Object();
+
     // 用来保存所有的bean信息
-    private final Map<String, Object> factoryBeanObjectCache = new ConcurrentHashMap<>(16);
+    private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(16);
 
     private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
 
-    public Map<String, Object> getFactoryBeanObjectCache() {
-        return factoryBeanObjectCache;
+    public Map<String, Object> getSingletonObjects() {
+        return singletonObjects;
     }
 
     @Override
     public void registerSingleton(String beanName, Object singletonObject) {
-        factoryBeanObjectCache.put(beanName, singletonObject);
+        singletonObjects.put(beanName, singletonObject);
     }
 
     @Override
     public Object getSingleton(String beanName) {
-        return factoryBeanObjectCache.get(beanName);
+        return singletonObjects.get(beanName);
     }
 
     public void registerDisposableBean(String beanName, DisposableBean bean) {
