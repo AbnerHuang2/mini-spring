@@ -17,7 +17,7 @@ public class TestUserService implements BeanNameAware, ApplicationContextAware{
     }
 
     public void hello() {
-        System.out.println(String.format("hello world! %s %s %s", name, age, testUserMapper.get("a")));
+        System.out.printf("hello world! %s %s %s%n", name, age, testUserMapper.get("a"));
     }
 
     public int getAge() {
@@ -31,12 +31,12 @@ public class TestUserService implements BeanNameAware, ApplicationContextAware{
     @Override
     public void setBeanName(String name) {
         this.name = name;
-        System.out.println(String.format("TestUserService.setBeanName %s", name));
+        System.out.printf("TestUserService.setBeanName %s%n", name);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        System.out.println(String.format("TestUserService.setApplicationContext %s", applicationContext));
+        System.out.printf("TestUserService.setApplicationContext %s%n", applicationContext);
     }
 }
