@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
-    <bean id="testUserService" class="org.skitii.context.test.TestUserService">
+    <bean id="testUserMapper" class="org.skitii.context.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
+    <bean id="testUserService" class="org.skitii.context.TestUserService">
         <property name="name" value="sk"/>
         <property name="testUserMapper" ref="testUserMapper"/>
     </bean>
 
-    <bean class="org.skitii.context.test.common.MyBeanPostProcessor"/>
-    <bean class="org.skitii.context.test.common.MyBeanFactoryPostProcessor"/>
+    <bean class="org.skitii.context.common.MyBeanPostProcessor"/>
+    <bean class="org.skitii.context.common.MyBeanFactoryPostProcessor"/>
 </beans>

@@ -1,7 +1,7 @@
-package org.skitii.context.test.common;
+package org.skitii.context.common;
 
 
-import org.skitii.context.test.TestUserService;
+import org.skitii.context.TestUserService;
 import org.skitii.factory.config.BeanPostProcessor;
 
 public class MyBeanPostProcessor implements BeanPostProcessor {

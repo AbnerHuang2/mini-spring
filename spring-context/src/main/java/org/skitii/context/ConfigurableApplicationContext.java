@@ -1,4 +1,4 @@
-package org.skitii.context.test;
+package org.skitii.context;
 
 /**
  * @author skitii

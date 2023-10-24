@@ -1,6 +1,6 @@
-package org.skitii.context.test.support;
+package org.skitii.context.support;
 
-import org.skitii.context.test.ConfigurableApplicationContext;
+import org.skitii.context.ConfigurableApplicationContext;
 import org.skitii.core.io.DefaultResourceLoader;
 import org.skitii.factory.ConfigurableListableBeanFactory;
 import org.skitii.factory.config.BeanFactoryPostProcessor;
@@ -31,6 +31,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        // 注入applicationContext感知处理器
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+        //注入beanPostProcessor
         Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
         for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
             beanFactory.addBeanPostProcessor(beanPostProcessor);

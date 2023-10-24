@@ -1,4 +1,4 @@
-package org.skitii.context.test.common;
+package org.skitii.context.common;
 
 
 import org.skitii.factory.ConfigurableListableBeanFactory;

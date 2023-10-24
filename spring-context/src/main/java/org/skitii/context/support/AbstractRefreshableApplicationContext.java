@@ -1,4 +1,4 @@
-package org.skitii.context.test.support;
+package org.skitii.context.support;
 
 import org.skitii.factory.support.DefaultListableBeanFactory;
 

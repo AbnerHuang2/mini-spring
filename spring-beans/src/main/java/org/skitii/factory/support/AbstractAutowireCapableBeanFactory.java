@@ -1,6 +1,7 @@
 package org.skitii.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import org.skitii.factory.*;
 import org.skitii.factory.config.BeanDefinition;
@@ -92,6 +93,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        // invokeAwareMethods
+        invokeAwareMethods(beanName, bean);
+
         // 1. 执行BeanPostProcessor的前置处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
         // 2. 执行bean的初始化方法
@@ -99,6 +103,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // 3. 执行BeanPostProcessor的后置处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
         return wrappedBean;
+    }
+
+    private void invokeAwareMethods(String beanName, Object bean) {
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanClassLoaderAware){
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(ClassUtil.getClassLoader());
+            }
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+        }
     }
 
     private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {

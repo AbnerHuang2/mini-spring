@@ -1,6 +1,6 @@
-package org.skitii.context.test;
+package org.skitii.context;
 
-import org.skitii.context.test.support.ClassPathXmlApplicationContext;
+import org.skitii.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author skitii
