@@ -1,4 +1,4 @@
-package org.skitii.context;
+package org.skitii.context.test;
 
 import org.skitii.factory.InitializingBean;
 

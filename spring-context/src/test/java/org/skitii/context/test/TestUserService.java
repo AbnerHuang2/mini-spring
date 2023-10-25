@@ -1,12 +1,14 @@
-package org.skitii.context;
+package org.skitii.context.test;
 
+import org.skitii.context.ApplicationContext;
+import org.skitii.context.ApplicationContextAware;
 import org.skitii.factory.BeanNameAware;
 
 /**
  * @author skitii
  * @since 2023/10/13
  **/
-public class TestUserService implements BeanNameAware, ApplicationContextAware{
+public class TestUserService implements BeanNameAware, ApplicationContextAware {
     private String name;
     private int age;
     ApplicationContext applicationContext;

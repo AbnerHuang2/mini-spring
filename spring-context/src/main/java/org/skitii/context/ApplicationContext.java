@@ -1,5 +1,6 @@
 package org.skitii.context;
 
+import org.skitii.core.io.ResourceLoader;
 import org.skitii.factory.ListableBeanFactory;
 
 /**
@@ -7,5 +8,5 @@ import org.skitii.factory.ListableBeanFactory;
  * @author skitii
  * @since 2023/10/20
  **/
-public interface ApplicationContext extends ListableBeanFactory {
+public interface ApplicationContext extends ListableBeanFactory, ResourceLoader, ApplicationEventPublisher {
 }

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="testUserMapper" class="org.skitii.context.TestUserMapper"/>
-    <bean id="testUserService" class="org.skitii.context.TestUserService">
+    <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
+    <bean id="testUserService" class="org.skitii.context.test.TestUserService">
         <property name="name" value="sk"/>
         <property name="testUserMapper" ref="testUserMapper"/>
     </bean>
 
-    <bean id="proxyUserDao" class="org.skitii.context.factorybean.ProxyBeanFactory"/>
+    <bean id="proxyUserDao" class="org.skitii.context.test.factorybean.ProxyBeanFactory">
+        <property name="testUserMapper" ref="testUserMapper"/>
+    </bean>
 
-    <bean id="testPrototypeBeanMapper" class="org.skitii.context.TestPrototypeBeanMapper" scope="prototype" />
+    <bean id="testPrototypeBeanMapper" class="org.skitii.context.test.TestPrototypeBeanMapper" scope="prototype" />
+
+    <bean id="testListener" class="org.skitii.context.test.event.TestListener" />
+    <bean id="customListener" class="org.skitii.context.test.event.CustomListener" />
 </beans>

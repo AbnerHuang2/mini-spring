@@ -1,6 +1,7 @@
-package org.skitii.context;
+package org.skitii.context.test;
 
-import org.skitii.context.factorybean.IUserDao;
+import org.skitii.context.test.event.CustomEvent;
+import org.skitii.context.test.factorybean.IUserDao;
 import org.skitii.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -25,6 +26,9 @@ public class TestMain {
         TestPrototypeBeanMapper prototype1 = (TestPrototypeBeanMapper) applicationContext.getBean("testPrototypeBeanMapper");
         TestPrototypeBeanMapper prototype2 = (TestPrototypeBeanMapper) applicationContext.getBean("testPrototypeBeanMapper");
         System.out.printf("prototype1:%s prototype2:%s%n", prototype1, prototype2);
+
+        // test event
+        applicationContext.publishEvent(new CustomEvent(applicationContext,  "我发布了一个custom event."));
 
     }
 }

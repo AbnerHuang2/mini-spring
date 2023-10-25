@@ -1,6 +1,6 @@
-package org.skitii.context.factorybean;
+package org.skitii.context.test.factorybean;
 
-import org.skitii.context.TestUserMapper;
+import org.skitii.context.test.TestUserMapper;
 import org.skitii.factory.FactoryBean;
 
 import java.lang.reflect.InvocationHandler;

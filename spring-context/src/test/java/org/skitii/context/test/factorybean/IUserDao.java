@@ -1,4 +1,4 @@
-package org.skitii.context.factorybean;
+package org.skitii.context.test.factorybean;
 
 /**
  * @author skitii
