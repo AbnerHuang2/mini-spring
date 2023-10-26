@@ -13,6 +13,7 @@
         <module>spring-core</module>
         <module>spring-beans</module>
         <module>spring-context</module>
+        <module>spring-aop</module>
     </modules>
 
     <properties>
@@ -20,5 +21,22 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
