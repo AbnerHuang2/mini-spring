@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
+    <bean id="userService" class="org.skitii.context.test.aop.UserService">
+
+    </bean>
+
+    <bean class="org.skitii.aop.springframework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+    <bean id="beforeAdvice" class="org.skitii.context.test.aop.UserServiceBeforeAdvice"/>
+
+    <bean id="methodInterceptor" class="org.skitii.aop.springframework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+
+    <bean id="afterAdvice" class="org.skitii.context.test.aop.UserServiceAfterAdvice"/>
+    <bean id="methodInterceptor1" class="org.skitii.aop.springframework.adapter.MethodAfterAdviceInterceptor">
+        <property name="advice" ref="afterAdvice"/>
+    </bean>
+
+    <bean id="pointcutAdvisor" class="org.skitii.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* org.skitii.context.test.aop.IUserService.*(..))"/>
+        <property name="advice" ref="methodInterceptor"/>
+    </bean>
+
+</beans>

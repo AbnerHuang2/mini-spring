@@ -3,10 +3,12 @@ package org.skitii.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import org.skitii.BeansException;
 import org.skitii.factory.*;
 import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.config.BeanPostProcessor;
 import org.skitii.factory.config.BeanReference;
+import org.skitii.factory.config.InstantiationAwareBeanPostProcessor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -20,14 +22,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     private  InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
     @Override
-    protected Object createBean(String beanName, BeanDefinition beanDefinition) {
-        return doCreateBean(beanName, beanDefinition);
+    protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
+        return doCreateBean(beanName, beanDefinition, args);
     }
 
-    public Object doCreateBean(String beanName, BeanDefinition beanDefinition) {
+    public Object doCreateBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
         try {
-            Object bean = createBeanInstance(beanDefinition);
-            // 属性注入
+            // 判断是否是代理bean对象
+            Object bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (bean == null) {
+                // 实例化 Bean
+                bean = createBeanInstance(beanDefinition, args);
+            }
+
+            // 属性注入【！代理对象的属性注入会存在问题】
             applyPropertyValues(beanName, beanDefinition, bean);
             // 初始化
             bean = initializeBean(beanName, bean, beanDefinition);
@@ -42,8 +50,29 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
             return bean;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BeansException(e.getMessage(), e);
         }
+    }
+
+    private Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (bean != null) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    private Object applyBeanPostProcessorsBeforeInstantiation(Class beanClass, String beanName) {
+        //每个bean都检查一遍需不需要被aop代理
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
     private void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
@@ -63,7 +92,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @throws InvocationTargetException
      * @throws NoSuchFieldException
      */
-    private Object createBeanInstance(BeanDefinition beanDefinition) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    private Object createBeanInstance(BeanDefinition beanDefinition, Object[] args1) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Constructor[] constructors = beanDefinition.getBeanClass().getDeclaredConstructors();
         for (Constructor constructor : constructors) {
             Object[] args = new Object[constructor.getParameterCount()];

@@ -13,6 +13,8 @@ import org.aopalliance.intercept.MethodInterceptor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdvisedSupport {
+    // ProxyConfig
+    private boolean proxyTargetClass = false;
     // 目标对象
     private TargetSource targetSource;
     // 方法拦截器

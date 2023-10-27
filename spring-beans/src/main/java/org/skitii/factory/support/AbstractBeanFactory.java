@@ -27,10 +27,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
     @Override
     public Object getBean(String name) {
-        return doGetBean(name);
+        return doGetBean(name, null);
     }
 
-    protected Object doGetBean(String name) {
+    @Override
+    public Object getBean(String name, Object... args) {
+        return doGetBean(name, args);
+    }
+
+    protected Object doGetBean(String name, Object[] args) {
         // 1. 从缓存中获取
         Object bean = getSingleton(name);
         if (bean != null) {
@@ -39,7 +44,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             return bean;
         }
         // 2. 创建bean并放入缓存
-        bean = createBean(name, mergedBeanDefinitions.get(name));
+        bean = createBean(name, mergedBeanDefinitions.get(name), args);
 
         return getObjectForBeanInstance(bean, name);
     }
@@ -56,7 +61,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         return object;
     }
 
-    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition);
+    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args);
 
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
