@@ -30,10 +30,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         try {
             // 判断是否是代理bean对象
             Object bean = resolveBeforeInstantiation(beanName, beanDefinition);
-            if (bean == null) {
-                // 实例化 Bean
-                bean = createBeanInstance(beanDefinition, args);
+            if (bean != null) {
+                return bean;
             }
+            // 实例化 Bean
+            bean = createBeanInstance(beanDefinition, args);
+
             // 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
             applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
 

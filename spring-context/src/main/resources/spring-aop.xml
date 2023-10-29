@@ -2,7 +2,11 @@
 <beans>
     <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
     <bean id="userService" class="org.skitii.context.test.aop.UserService">
+        <property name="name" value="${name}"/>
+    </bean>
 
+    <bean class="org.skitii.factory.support.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:app.properties"/>
     </bean>
 
     <bean class="org.skitii.aop.springframework.autoproxy.DefaultAdvisorAutoProxyCreator"/>

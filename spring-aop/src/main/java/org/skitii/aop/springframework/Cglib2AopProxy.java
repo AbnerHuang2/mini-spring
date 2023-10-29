@@ -17,7 +17,10 @@ public class Cglib2AopProxy implements AopProxy {
     @Override
     public Object getProxy() {
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(advised.getTargetSource().getTargetClass()[0]);
+        Class<?> supperClass = advised.getTargetSource().getTargetClass()[0];
+        System.out.println("supperClass = " + supperClass);
+        enhancer.setSuperclass(supperClass);
+
         enhancer.setCallback(new DynamicAdvisedInterceptor(advised));
         return enhancer.create();
     }

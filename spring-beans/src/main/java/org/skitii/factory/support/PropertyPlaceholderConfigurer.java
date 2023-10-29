@@ -7,6 +7,8 @@ import org.skitii.factory.ConfigurableListableBeanFactory;
 import org.skitii.factory.PropertyValue;
 import org.skitii.factory.PropertyValues;
 import org.skitii.factory.StringValueResolver;
+import org.skitii.factory.annotation.Component;
+import org.skitii.factory.annotation.Value;
 import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.config.BeanFactoryPostProcessor;
 
