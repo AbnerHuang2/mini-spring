@@ -7,13 +7,15 @@ import java.util.Random;
  */
 public class UserService implements IUserService {
 
+    private String name;
+
     public String queryUserInfo() {
         try {
             Thread.sleep(new Random(1).nextInt(100));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return "Skitii，100001，广州";
+        return name+"，100001，广州";
     }
 
     public String register(String userName) {

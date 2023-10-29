@@ -1,5 +1,7 @@
 package org.skitii.context.support;
 
+import org.skitii.context.annotation.ClassPathBeanDefinitionScanner;
+import org.skitii.factory.support.BeanDefinitionRegistry;
 import org.skitii.factory.support.DefaultListableBeanFactory;
 import org.skitii.factory.support.XmlBeanDefinitionReader;
 
@@ -14,8 +16,18 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableA
         String[] loctions = getResouresLocations();
         if (loctions != null) {
             beanDefinitionReader.loadBeanDefinitions(loctions);
+            String[] basePackages = beanDefinitionReader.getBasePackages(loctions);
+            if (basePackages != null) {
+                scan(beanFactory, basePackages);
+            }
         }
     }
 
     protected abstract String[] getResouresLocations();
+
+    private void scan(BeanDefinitionRegistry beanDefinitionRegistry, String... basePackages) {
+        ClassPathBeanDefinitionScanner classPathBeanDefinitionScanner = new ClassPathBeanDefinitionScanner(beanDefinitionRegistry);
+        classPathBeanDefinitionScanner.scan(basePackages);
+    }
+
 }

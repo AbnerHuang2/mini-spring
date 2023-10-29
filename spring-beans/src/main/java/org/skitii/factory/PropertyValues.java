@@ -22,7 +22,7 @@ public class PropertyValues implements Iterable<PropertyValue> {
         return Arrays.asList(getPropertyValues()).iterator();
     }
 
-    PropertyValue[] getPropertyValues() {
+    public PropertyValue[] getPropertyValues() {
         return propertyValueList.toArray(new PropertyValue[0]);
     }
 

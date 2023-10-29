@@ -16,4 +16,6 @@ public interface BeanDefinitionReader {
     int loadBeanDefinitions(Resource resource);
 
     int loadBeanDefinitions(String... locations);
+
+    String[] getBasePackages(String... locations);
 }

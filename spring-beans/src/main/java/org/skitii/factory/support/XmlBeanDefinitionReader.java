@@ -42,6 +42,30 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader{
         return count;
     }
 
+    @Override
+    public String[] getBasePackages(String... locations) {
+        ArrayList<String> basePackages = new ArrayList<>();
+        for (String loc : locations) {
+            Resource resource = getResourceLoader().getResource(loc);
+            try(InputStream inputStream = resource.getInputStream()){
+                Document doc = XmlUtil.readXML(inputStream);
+                Element root = doc.getDocumentElement();
+                NodeList childNodes = root.getChildNodes();
+                for (int i = 0; i < childNodes.getLength(); i++) {
+                    Node item = childNodes.item(i);
+                    if ( ! (item instanceof Element) ) continue;
+                    if (!"context:component-scan".equals(item.getNodeName())) continue;
+                    Element ele = (Element) item;
+                    String basePackage = ele.getAttribute("base-package");
+                    basePackages.add(basePackage);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return basePackages.toArray(new String[0]);
+    }
+
     private int doLoadBeanDefinitions(InputStream inputStream) throws ClassNotFoundException {
         Document doc = XmlUtil.readXML(inputStream);
         Element root = doc.getDocumentElement();
