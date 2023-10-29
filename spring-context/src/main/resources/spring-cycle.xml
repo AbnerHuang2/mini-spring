@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/context">
+
+
+    <context:component-scan base-package="org.skitii.context.test.scan"/>
+
+    <bean id="testUserMapper" class="org.skitii.context.test.TestUserMapper" init-method="initDataMethod" destroy-method="destroyDataMethod" />
+
+    <bean id="userService" class="org.skitii.context.test.aop.UserService">
+        <property name="name" value="${name}"/>
+    </bean>
+
+    <bean class="org.skitii.factory.support.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:app.properties"/>
+    </bean>
+
+    <bean class="org.skitii.aop.springframework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+    <bean id="beforeAdvice" class="org.skitii.context.test.aop.UserServiceBeforeAdvice"/>
+
+    <bean id="methodInterceptor" class="org.skitii.aop.springframework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+
+    <bean id="afterAdvice" class="org.skitii.context.test.aop.UserServiceAfterAdvice"/>
+    <bean id="methodInterceptor1" class="org.skitii.aop.springframework.adapter.MethodAfterAdviceInterceptor">
+        <property name="advice" ref="afterAdvice"/>
+    </bean>
+
+    <bean id="pointcutAdvisor" class="org.skitii.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* org.skitii.context.test.aop.IUserService.*(..))"/>
+        <property name="advice" ref="methodInterceptor"/>
+    </bean>
+
+</beans>
