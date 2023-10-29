@@ -25,12 +25,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
      */
     protected final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
-    private final Map<String, BeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);
-
-    public Map<String, BeanDefinition> getMergedBeanDefinitions() {
-        return mergedBeanDefinitions;
-    }
-
     @Override
     public Object getBean(String name) {
         return doGetBean(name, null);
@@ -50,7 +44,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             return bean;
         }
         // 2. 创建bean并放入缓存
-        bean = createBean(name, mergedBeanDefinitions.get(name), args);
+        bean = createBean(name, getBeanDefinition(name), args);
 
         return getObjectForBeanInstance(bean, name);
     }
@@ -72,23 +66,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         return (T) getBean(name);
     }
 
-    @Override
-    public <T> T getBean(Class<T> requiredType) throws BeansException {
-        List<String> beanNames = new ArrayList<>();
-        for (Map.Entry<String, BeanDefinition> entry : getMergedBeanDefinitions().entrySet()) {
-            Class beanClass = entry.getValue().getBeanClass();
-            if (requiredType.isAssignableFrom(beanClass)) {
-                beanNames.add(entry.getKey());
-            }
-        }
-        if (1 == beanNames.size()) {
-            return getBean(beanNames.get(0), requiredType);
-        }
-
-        throw new BeansException(requiredType + "expected single bean but found " + beanNames.size() + ": " + beanNames);
-    }
-
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args);
+
+    protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
