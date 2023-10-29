@@ -1,4 +1,4 @@
-package org.skitii.context.annotation;
+package org.skitii.factory.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

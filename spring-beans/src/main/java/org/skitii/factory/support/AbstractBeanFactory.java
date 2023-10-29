@@ -1,6 +1,8 @@
 package org.skitii.factory.support;
 
+import org.skitii.BeansException;
 import org.skitii.factory.FactoryBean;
+import org.skitii.factory.StringValueResolver;
 import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.config.BeanPostProcessor;
 import org.skitii.factory.config.ConfigurableBeanFactory;
@@ -18,12 +20,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
-    public Map<String, BeanDefinition> getMergedBeanDefinitions() {
-        return mergedBeanDefinitions;
-    }
+    /**
+     * String resolvers to apply e.g. to annotation attribute values
+     */
+    protected final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     private final Map<String, BeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256);
 
+    public Map<String, BeanDefinition> getMergedBeanDefinitions() {
+        return mergedBeanDefinitions;
+    }
 
     @Override
     public Object getBean(String name) {
@@ -61,6 +67,27 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         return object;
     }
 
+    @Override
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+        return (T) getBean(name);
+    }
+
+    @Override
+    public <T> T getBean(Class<T> requiredType) throws BeansException {
+        List<String> beanNames = new ArrayList<>();
+        for (Map.Entry<String, BeanDefinition> entry : getMergedBeanDefinitions().entrySet()) {
+            Class beanClass = entry.getValue().getBeanClass();
+            if (requiredType.isAssignableFrom(beanClass)) {
+                beanNames.add(entry.getKey());
+            }
+        }
+        if (1 == beanNames.size()) {
+            return getBean(beanNames.get(0), requiredType);
+        }
+
+        throw new BeansException(requiredType + "expected single bean but found " + beanNames.size() + ": " + beanNames);
+    }
+
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args);
 
     @Override
@@ -68,6 +95,21 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         this.beanPostProcessors.remove(beanPostProcessor);
         this.beanPostProcessors.add(beanPostProcessor);
     }
+
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
+        this.embeddedValueResolvers.add(valueResolver);
+    }
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver resolver : this.embeddedValueResolvers) {
+            result = resolver.resolveStringValue(result);
+        }
+        return result;
+    }
+
 
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return this.beanPostProcessors;

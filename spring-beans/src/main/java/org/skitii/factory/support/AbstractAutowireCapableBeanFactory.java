@@ -34,6 +34,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 // 实例化 Bean
                 bean = createBeanInstance(beanDefinition, args);
             }
+            // 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
 
             // 属性注入【！代理对象的属性注入会存在问题】
             applyPropertyValues(beanName, beanDefinition, bean);
@@ -51,6 +53,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             return bean;
         } catch (Exception e) {
             throw new BeansException(e.getMessage(), e);
+        }
+    }
+
+    private void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                if (null != pvs) {
+                    beanDefinition.setPropertyValues(pvs);
+                }
+            }
         }
     }
 

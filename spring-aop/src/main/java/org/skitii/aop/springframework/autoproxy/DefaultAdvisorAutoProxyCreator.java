@@ -2,11 +2,13 @@ package org.skitii.aop.springframework.autoproxy;
 
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
+import org.skitii.BeansException;
 import org.skitii.aop.*;
 import org.skitii.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.skitii.aop.springframework.ProxyFactory;
 import org.skitii.factory.BeanFactory;
 import org.skitii.factory.BeanFactoryAware;
+import org.skitii.factory.PropertyValues;
 import org.skitii.factory.config.InstantiationAwareBeanPostProcessor;
 import org.skitii.factory.support.DefaultListableBeanFactory;
 
@@ -52,6 +54,11 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             return new ProxyFactory(advisedSupport).getProxy();
         }
         return null;
+    }
+
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException {
+        return pvs;
     }
 
     private boolean isInfrastructureClass(Class<?> beanClass) {

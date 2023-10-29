@@ -5,6 +5,10 @@ import org.skitii.factory.support.BeanDefinitionRegistry;
 import org.skitii.factory.support.DefaultListableBeanFactory;
 import org.skitii.factory.support.XmlBeanDefinitionReader;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author skitii
  * @since 2023/10/23
@@ -16,11 +20,19 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableA
         String[] loctions = getResouresLocations();
         if (loctions != null) {
             beanDefinitionReader.loadBeanDefinitions(loctions);
+            List<String> basePackageList = new ArrayList<>();
+            basePackageList.addAll(getBaseFrameworkPackage());
             String[] basePackages = beanDefinitionReader.getBasePackages(loctions);
             if (basePackages != null) {
-                scan(beanFactory, basePackages);
+                basePackageList.addAll(Arrays.asList(basePackages));
             }
+
+            scan(beanFactory, basePackageList.toArray(new String[0]));
         }
+    }
+
+    private List<String> getBaseFrameworkPackage() {
+        return Arrays.asList("org.skitii.factory");
     }
 
     protected abstract String[] getResouresLocations();

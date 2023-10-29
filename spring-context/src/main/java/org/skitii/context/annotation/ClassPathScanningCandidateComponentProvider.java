@@ -1,6 +1,7 @@
 package org.skitii.context.annotation;
 
 import cn.hutool.core.util.ClassUtil;
+import org.skitii.factory.annotation.Component;
 import org.skitii.factory.config.BeanDefinition;
 
 import java.util.LinkedHashSet;

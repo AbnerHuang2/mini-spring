@@ -99,6 +99,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     @Override
+    public <T> T getBean(String name, Class<T> requiredType) {
+        return obtainFreshBeanFactory().getBean(name,requiredType);
+    }
+
+    @Override
+    public <T> T getBean(Class<T> requiredType) {
+        return obtainFreshBeanFactory().getBean(requiredType);
+    }
+
+    @Override
     public String[] getBeanDefinitionNames() {
         return obtainFreshBeanFactory().getBeanDefinitionNames();
     }

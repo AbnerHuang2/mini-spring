@@ -1,5 +1,7 @@
 package org.skitii.context.annotation;
 
+import org.skitii.factory.annotation.Component;
+import org.skitii.factory.annotation.Scope;
 import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.support.BeanDefinitionRegistry;
 

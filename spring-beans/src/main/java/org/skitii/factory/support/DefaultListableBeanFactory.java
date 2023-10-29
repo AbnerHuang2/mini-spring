@@ -1,6 +1,7 @@
 package org.skitii.factory.support;
 
 import org.skitii.factory.ConfigurableListableBeanFactory;
+import org.skitii.factory.StringValueResolver;
 import org.skitii.factory.config.BeanDefinition;
 
 import java.util.HashMap;
