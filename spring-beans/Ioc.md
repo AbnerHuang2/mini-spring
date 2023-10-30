@@ -1,11 +1,15 @@
 # 实现Spring IOC容器
 通过对Spring IOC容器的实现，可以更好的理解Spring IOC容器的实现原理，以及Spring IOC容器的扩展点。
+## 目录结构
+
+
 ## IOC容器核心步骤
 1. 初始化容器
 2. 注册bean定义
 3. 获取bean
 
 ## IOC容器核心组件
+
 ### BeanFactory
 bean工厂，定义了IOC容器的基本功能，主要是获取bean，创建bean等。是整个ioc容器的根基，核心定义
 ### BeanDefinitionRegistry
