@@ -7,6 +7,7 @@ import org.skitii.context.event.ApplicationEventMulticaster;
 import org.skitii.context.event.ContextClosedEvent;
 import org.skitii.context.event.ContextRefreshedEvent;
 import org.skitii.context.event.SimpleApplicationEventMulticaster;
+import org.skitii.core.convert.ConversionService;
 import org.skitii.core.io.DefaultResourceLoader;
 import org.skitii.factory.ConfigurableListableBeanFactory;
 import org.skitii.factory.config.BeanFactoryPostProcessor;
@@ -40,9 +41,21 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         registerListeners();
 
         // 7.提前实例化单例Bean对象
-        beanFactory.preInstantiateSingletons();
+        finishBeanFactoryInitialization(beanFactory);
 
         finishRefresh();
+    }
+
+    protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory){
+        // 设置类型转换器
+        if (beanFactory.containsBean("conversionService")) {
+            Object conversionService = beanFactory.getBean("conversionService");
+            if (conversionService instanceof ConversionService) {
+                beanFactory.setConversionService((ConversionService) conversionService);
+            }
+        }
+
+        beanFactory.preInstantiateSingletons();
     }
 
     private void initApplicationEventMulticaster() {
@@ -101,6 +114,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     @Override
     public <T> T getBean(String name, Class<T> requiredType) {
         return obtainFreshBeanFactory().getBean(name,requiredType);
+    }
+
+    @Override
+    public boolean containsBean(String name) {
+        return obtainFreshBeanFactory().containsBean(name);
     }
 
     @Override

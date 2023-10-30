@@ -3,7 +3,9 @@ package org.skitii.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.TypeUtil;
 import org.skitii.BeansException;
+import org.skitii.core.convert.ConversionService;
 import org.skitii.factory.*;
 import org.skitii.factory.config.BeanDefinition;
 import org.skitii.factory.config.BeanPostProcessor;
@@ -38,7 +40,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             // 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
             applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
 
-            // 属性注入【！代理对象的属性注入会存在问题】
+            // 属性注入
             applyPropertyValues(beanName, beanDefinition, bean);
             // 初始化
             bean = initializeBean(beanName, bean, beanDefinition);
@@ -140,6 +142,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 BeanReference beanReference = (BeanReference) value;
                 // 递归获取或创建bean【可能存在循环依赖的问题，后续处理】
                 value = getBean(beanReference.getBeanName());
+            }
+            // 类型转换
+            else {
+                Class<?> sourceType = value.getClass();
+                Class<?> targetType = (Class<?>) TypeUtil.getFieldType(bean.getClass(), name);
+                ConversionService conversionService = getConversionService();
+                if (conversionService != null) {
+                    if (conversionService.canConvert(sourceType, targetType)) {
+                        value = conversionService.convert(value, targetType);
+                    }
+                }
             }
             //设置属性
             BeanUtil.setFieldValue(bean, name, value);

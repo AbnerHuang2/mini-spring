@@ -1,6 +1,7 @@
 package org.skitii.factory.support;
 
 import org.skitii.BeansException;
+import org.skitii.core.convert.ConversionService;
 import org.skitii.factory.FactoryBean;
 import org.skitii.factory.StringValueResolver;
 import org.skitii.factory.config.BeanDefinition;
@@ -9,8 +10,6 @@ import org.skitii.factory.config.ConfigurableBeanFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author skitii
@@ -24,6 +23,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
      * String resolvers to apply e.g. to annotation attribute values
      */
     protected final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
+
+    private ConversionService conversionService;
+
+    @Override
+    public boolean containsBean(String name) {
+        return containsBeanDefinition(name);
+    }
+
+    protected abstract boolean containsBeanDefinition(String beanName);
 
     @Override
     public Object getBean(String name) {
@@ -88,6 +96,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             result = resolver.resolveStringValue(result);
         }
         return result;
+    }
+
+    @Override
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
+
+    @Override
+    public ConversionService getConversionService() {
+        return conversionService;
     }
 
 

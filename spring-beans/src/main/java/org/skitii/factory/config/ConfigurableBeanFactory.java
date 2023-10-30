@@ -1,5 +1,6 @@
 package org.skitii.factory.config;
 
+import org.skitii.core.convert.ConversionService;
 import org.skitii.factory.BeanFactory;
 import org.skitii.factory.StringValueResolver;
 
@@ -30,5 +31,14 @@ public interface ConfigurableBeanFactory extends BeanFactory, SingletonBeanRegis
      * @since 3.0
      */
     String resolveEmbeddedValue(String value);
+
+    /**
+     * Specify a Spring 3.0 ConversionService to use for converting
+     * property values, as an alternative to JavaBeans PropertyEditors.
+     * @since 3.0
+     */
+    void setConversionService(ConversionService conversionService);
+
+    ConversionService getConversionService();
 
 }
