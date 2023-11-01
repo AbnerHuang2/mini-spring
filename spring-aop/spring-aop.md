@@ -1,4 +1,9 @@
 # 实现Spring AOP切面
+## spring-aop模块核心功能分析
+1. 如何实现配置切面，然后就可以通过代理执行切面逻辑
+2. 如何和spring的生命周期结合，实现切面的执行
+
+
 ## 核心原理
 1. 定义切点，去匹配对应的类和方法 【Pointcut】
 2. 定义织入对象【AdvisedSupport】，包含目标类和切面类【MethodInterceptor】，匹配器【AspectJExpressionPointcut】 
