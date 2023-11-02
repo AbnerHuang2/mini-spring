@@ -15,7 +15,7 @@
 
 ### Bean的创建与管理
 类图关系总览
-![img.png](../img/beanfactory.png)
+![img.png](../img/beanfactory-map.png)
 
 ### Bean的定义的加载与管理
 类图关系总览
