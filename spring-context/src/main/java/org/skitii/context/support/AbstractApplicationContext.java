@@ -42,7 +42,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
         // 7.提前实例化单例Bean对象
         finishBeanFactoryInitialization(beanFactory);
-
+        // 8. 完成刷新的后缀处理，如发布完成事件等
         finishRefresh();
     }
 
