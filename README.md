@@ -1,8 +1,11 @@
+## mini-spring
+从Spring的基础功能出发，借鉴spring5.3的源码逐步实现Spring的核心功能，从而更好的理解Spring的核心功能。
 ## 查看效果
 1. 下载代码
 2. 设置jdk8
 3. 运行spring-context下的test包下的TestMain中的main方法
-##说明
+
+## 说明
 从Spring的基础功能出发，借鉴spring5.3的源码逐步实现Spring的核心功能，从而更好的理解Spring的核心功能。
 每次提交都有对新增功能的说明，可以从提交记录中查看具体功能的改动实现。
 ## 目标-实现Spring核心功能
